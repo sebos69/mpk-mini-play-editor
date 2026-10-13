@@ -1,0 +1,400 @@
+Editor User Guide
+
+Manual Version 1.0
+
+Table of Contents
+User Guide .................................................................................................................................. 3
+Introduction ........................................................................................................................... 3
+Support .............................................................................................................................. 3
+Setup ...................................................................................................................................... 4
+Features ................................................................................................................................. 5
+Graphical Interface ............................................................................................................ 5
+Operation ............................................................................................................................... 7
+Managing Your Favorites .................................................................................................. 7
+Saving Favorites ........................................................................................................... 7
+Loading Favorites......................................................................................................... 8
+Sending Favorites ........................................................................................................ 9
+Editing a Pad’s MIDI Note ............................................................................................... 10
+Editing a Knob ................................................................................................................. 11
+Editing the X-Y Controller (Joystick) ................................................................................ 12
+Editing the Keyboard ....................................................................................................... 13
+Editing the Arpeggiator .................................................................................................... 14
+Editing the Sound ............................................................................................................ 16
+Editing the Keybed Curve ................................................................................................ 17
+Appendix ................................................................................................................................... 18
+Trademarks and Licenses .................................................................................................. 18
+2
+
+User Guide
+Introduction
+The MPK mini Play mk3 Editor software gives you intuitive ways to edit the many functions that your
+MPK mini Play mk3 can perform.
+
+Support
+For the latest information about this product (system requirements, compatibility information, etc.)
+and product registration, visit akaipro.com.
+For additional product support, visit akaipro.com/support.
+
+3
+
+Setup
+To use the MPK mini Play mk3 Editor:
+1.
+
+Optional: Connect the unit to your computer using a standard USB cable. (If you are
+connecting it to a USB hub, make sure it is a powered hub). You can still use the Editor and
+create favorites without connecting an MPK mini Play mk3, but you will not be able to
+send/load favorites to/from it.
+
+2.
+
+Open the Editor application on your computer. The window will show a visual representation of
+all its editable controls. See Features > Graphical Interface for an overview of each section.
+
+4
+
+Features
+Graphical Interface
+The MPK mini Play mk3 Editor has a straightforward user interface that can be broken down into
+nine sections for editing:
+
+1. Channel
+
+2. Sound
+
+3. Keyboard
+Sound FX
+
+4. Joystick
+
+5.
+Arpeggiator
+9. Knobs
+
+6. Favorites
+
+7. Pads
+
+8. Keyboard
+
+5
+
+1.
+
+Channel: These two fields determine the channels through which the pads, knobs, X-Y Controller, and
+keyboard send MIDI data. Specific instructions are provided in the chapters for each control:
+Operation > Editing a Pad’s MIDI Note, Editing a Knob, Editing the X-Y Controller (Joystick),
+Editing the Keyboard.
+
+2.
+
+Sound: These two fields allow for selection of the internal sound that will be played by the keyboard
+and the pads. See Operation > Editing the Sound to learn more.
+
+3.
+
+Keyboard Sound FX: This section allows you to control effects parameters for the internal sounds for
+the keyboard. See Operation > Editing the Sound to learn more.
+
+4.
+
+Joystick: These settings control the parameters affected when moving the X-Y Controller along its X
+axis (left/right) or Y axis (up/down). See Operation > Editing the X-Y Controller (Joystick) to learn
+more.
+
+5.
+
+Arpeggiator: These settings control the timing, range, and general behavior of the arpeggiator. See
+Operation > Editing the Arpeggiator to learn more.
+
+6.
+
+Favorites: These controls let you import a favorite from your computer or from your connected MPK
+mini Play mk3. They also allow you to save the current settings as a favorite and export them to your
+computer or to your connected device. See Operation > Managing Your Favorites to learn more.
+
+7.
+
+Pads: This section enables you to edit note assignments for the pads. 16 pads are pictured in the
+Editor: 8 of them correspond to the pads on the MPK mini Play mk3 when Bank A is active, and the
+other 8 correspond to the pads on the device when Bank B is active. This section also allows you to
+toggle the Aftertouch mode for the pads. See Operation > Editing a Pad’s MIDI Note to learn more.
+
+8.
+
+Keyboard: This is a visual representation of the 25-key keyboard with fields that allow for editing of
+the octave and transposition values. See Operation > Editing the Keyboard to learn more. To
+change the key velocity sensitivity, see Operation > Editing the Keybed Curve.
+
+9.
+
+Knobs: This section enables you to edit the function of the knobs. 8 knobs are pictured in the Editor: 4
+of them correspond to the knobs on the MPK mini Play mk3 when Bank A is active, and the other 4
+correspond to the knobs on the device when Bank B is active. See Operation > Editing a Knob to
+learn more.
+
+6
+
+Operation
+Managing Your Favorites
+With the Favorites feature, you can save all your current settings in the Editor to a single
+.mpkminiplaymk3 file that can be loaded onto your MPK mini Play mk3. The device holds a
+maximum of eight favorites, but you can store more favorites on your computer to load onto the unit
+later with the Editor. This way, you can have countless different control configurations for different
+situations. For instance, you may use different favorites with different software. Or you may use
+some favorites for production and others for performance.
+
+Saving Favorites
+After saving a favorite on your computer, you can send it to your MPK or edit it again later. All
+settings that you see in the Editor software will be saved in the favorite.
+To edit the name of a favorite, click on the Preset field in the top right corner and type in the
+desired name, which will be sent to the MPK mini Play mk3 along with the settings when clicking one
+of the eight Send icons.
+To save a favorite, go to File > Save Favorite. Alternatively, you can type Ctrl + S (Windows) or 
++ S (Mac). Then select the destination folder on your computer, enter a file name, and click Save. The
+favorite will be saved as an .mpkminiplaymk3 file.
+
+7
+
+Loading Favorites
+To load a favorite from a connected MPK mini Play mk3, click
+the Get icon corresponding to the number of the desired favorite
+(1-8).
+Note: Using the software to edit a favorite loaded from your MPK
+mini Play mk3 will not automatically affect this favorite on your
+keyboard; you will have to send the edited favorite to the keyboard
+after modifying it in order for the settings to take effect. See
+Sending Favorites below to learn more.
+To load a favorite from your computer, go to File > Open
+Favorite. Alternatively, you can type Ctrl + O (Windows) or  + O
+(Mac). Then locate the desired .mpkminiplaymk3 file and click
+Open.
+
+8
+
+Sending Favorites
+When you send from the Editor to a connected MPK mini Play mk3, all settings that you see in the
+Editor will be stored as a favorite on the MPK mini Play mk3’s internal memory. When playing your
+keyboard, the favorite will be available for you to activate whenever you like.
+To send a Favorite to a connected MPK mini Play mk3, click the Send icon corresponding to the
+number of the favorite you want to replace on your MPK mini Play mk3 (1-8). Doing so will overwrite
+the favorite currently stored in this number slot on the MPK mini Play mk3.
+Note: After sending a program to a Favorite, you will need to re-select it
+from the hardware for the settings to take effect. Press and hold the
+Favorites button and press the corresponding pad to reload the
+Favorite with the new program.
+You can also send a favorite to MPK mini Play mk3's RAM, where it will
+be kept temporarily and will not overwrite any favorite stored on the
+device. This applies the settings to the unit and lets you try them out
+without fully committing to them. If you then decide that you like the
+settings, you can save the favorite to your computer (see Saving
+Favorites above) or overwrite one of the currently stored favorites on
+your MPK mini Play mk3.
+To send a Program to the RAM of a connected MPK mini Play mk3, click the SEND TO RAM
+icon or go to File > Send Favorite > Ram.
+Note: To avoid losing the settings kept in the RAM, you will need to save them before modifying
+them with the Editor or exiting the Editor.
+
+9
+
+Editing a Pad’s MIDI Note
+You can set the MIDI note for any of the pads in Bank A or Bank B. You can also set the channel
+through which all the pads send their MIDI notes.
+To select a pad’s MIDI note, click the Note field within the pad and then type the
+desired MIDI note number (0 – 127). The MIDI note value will change accordingly.
+The current MIDI note value (C-1 – G9) will be displayed on the pad.
+
+To select the MIDI channel for all the pads, click the text field next
+to Pad at the top left corner under MIDI Channel. Then, select the
+desired MIDI channel number (1 – 16) from the drop-down menu.
+
+To change the pads’ aftertouch type, click the field undertneath the pads labeled Global Pad
+Aftertouch Type and select CHANNEL, POLY, or OFF. Enabling aftertouch allows for additional
+MIDI messages to be sent via varying pressure from a pad after it has been pressed down.
+CHANNEL mode affects the whole MIDI channel while POLY mode only affects the individual notes
+pressed.
+
+10
+
+Editing a Knob
+You can edit settings for each of the 4 knobs in both Bank A and Bank B, including CC message,
+minimum value, and maximum value. You can also set the channel through which all the knobs send
+MIDI data.
+To edit the name of a knob, click the text field above the knob and type in the
+desired name.
+To select the CC message a knob sends, click the CC field under a knob and
+then type the desired CC number (0 – 127).
+To select a knob's minimum and maximum values, click the Min field
+(minimum) or Max field (maximum) under a knob and then type the desired
+value (0 – 127).
+
+Note: Min/Max CC values will only be applied in MIDI Controller mode,
+and will not affect internal sounds.
+To select the MIDI channel for all the knobs, click the text field next to Keybed & Controls under
+MIDI Channel at the top left corner of the window. Then select the desired MIDI channel number (1 –
+16) from the drop-down menu. This will affect the X-Y Controller and keyboard as well as the knobs.
+
+11
+
+Editing the X-Y Controller (Joystick)
+You can designate the function for each axis of the X-Y Controller (joystick), allowing you to use it
+to manipulate up to two different parameters simultaneously.
+
+To designate the function of the axis, click the X Axis or Y Axis field next to the X-Y Controller
+icon and then select the desired function from the drop-down menu:
+• Pitchbend: Moving the X-Y controller along this axis will bend the keyboard pitch.
+• Single CC: Moving the X-Y controller along this axis will send a CC message.
+• Dual CC: Moving the X-Y controller along this axis will send one CC message in the positive
+direction (up or right) and another CC message in the negative direction (down or left).
+
+To select the CC message the X-Y Controller sends (when set to Single CC or Dual CC), click
+the CC field(s) and then type the desired value (0 – 127).
+To select the MIDI channel for the X-Y Controller,
+click the field next to Keybed & Controls under MIDI
+Channel at the top left corner of the window. Then
+select the desired MIDI channel number (1 – 16) from
+the drop-down menu. This will affect the knobs and
+keyboard as well as the X-Y Controller.
+
+12
+
+Editing the Keyboard
+The Editor allows you to set the keyboard's octave and transposition.
+
+To change the keyboard's octave, click the Octave field next to the keyboard icon. When the
+drop-down menu appears, select the desired value (-4 to 4 octaves). An octave of 0 means the
+keyboard is at its center/default octave.
+To transpose the keyboard, click the Transpose field next to the keyboard icon. Type in the
+desired value (-12 to 12 semitones). A transposition of 0 means the keyboard is not transposed.
+Press the Edit Key Curve button to the right of the keyboard icon to open the Keybed Curve menu.
+See Editing the Keybed Curve to learn more.
+
+To select the MIDI channel for the Keyboard,
+click the Keybed & Controls field under MIDI
+Channel at the top of the window. Then select the
+desired MIDI channel number (1 – 16) from the
+drop-down menu. This will affect the knobs and
+X-Y Controller as well as the keyboard.
+
+13
+
+Editing the Arpeggiator
+You can edit various parameters for the arpeggiator.
+
+To activate or deactivate the arpeggiator, click the On/Off icon. The icon will be light grey when
+the arpeggiator is on and dark grey when it is off.
+To set the arpeggiator's tempo, click the Tempo field and type in a tempo (60-240 BPM).
+To set the arpeggiator's time division, click the Time Div field. When the drop-down menu
+appears, select the desired setting (1/4 – 1/32T).
+To set the arpeggiator's swing, click the Swing field and enter the desired percentage (50 – 75%);
+the default value, 50%, is no swing.
+To set the arpeggiator's octave range, click the Octave field and select the desired value from the
+drop-down menu: 1, 2, 3, or 4 octaves.
+
+14
+
+To set the arpeggiator's mode, click the Mode field. When the drop-down menu appears, select
+the desired setting. The mode determines how the arpeggiated notes are played back:
+•
+
+Up: Notes will sound from lowest to highest.
+
+•
+
+Down: Notes will sound from highest to lowest.
+
+•
+
+Exclusive: Notes will sound from lowest to highest and then back down. The lowest and
+highest notes will sound only once at the directional change.
+
+•
+
+Inclusive: Notes will sound from lowest to highest and then back down. The lowest and
+highest notes will sound twice at the directional change.
+
+•
+
+Order: Notes will sound in the order they were pressed.
+
+•
+
+Random: Notes will sound in random order.
+
+To activate or deactivate the Latch, click the Latch field and then select Off or On from the dropdown menu.
+•
+
+Off: When the Latch is Off and you press keys, the Arpeggiator will cease after you
+release your fingers from the keyboard.
+
+•
+
+On: When the Latch is On and you press keys, the Arpeggiator will continue even after
+you release your fingers from the keyboard. While holding down the keys, you can add
+more notes to the arpeggio by pressing down additional keys. If you press the keys,
+release them, and then press a new combination of keys, the Arpeggiator will arpeggiate
+the new notes.
+
+To set the minimum number of taps required for MPK mini Play mk3’s Tap Tempo button to
+detect a new arpeggiator tempo, click the Tempo Taps field and select the desired number from
+the drop-down menu: 2, 3, or 4 taps.
+Note: The Tap Tempo button is disabled if the Arpeggiator is synced to an external clock.
+
+To set the clock destination of MPK mini Play mk3, click on the field next to Clock and
+select either Internal or External from the drop-down menu. When set to Internal, the
+arpeggiator will run off the unit’s internal clock. When set to External, the arpeggiator will run
+off clock data sent from a connected DAW.
+
+15
+
+Editing the Sound
+The Editor allows you to select the default keyboard sound and pad sound for a favorite.
+
+To select the keyboard sound, Click the Keyboard Sound field at the top of the window. When the
+drop-down menu appears, select one of the 128 available sounds.
+To select the pad sound, Click the Pad Sound field at the top of the window. When the drop-down
+menu appears, select one of the 10 available sounds.
+To add additional effects to the selected Keyboard Sound, Click one of the effects fields under
+Keyboard Sound FX and enter the desired value (0 – 127).
+
+Filter selects a frequency above which all other frequencies will not pass through.
+Reso. (Resonance) boosts the frequencies near the cutoff frequency (value selected by Filter field).
+Attack controls the time it takes for a note to reach its maximum volume, starting from when the key
+is pressed down.
+Release controls the time it takes for a note to reach its minimum volume.
+Reverb adds sustaining echo that simulates the sound reflecting off a solid surface.
+Chorus makes duplicates of a sound to be played back slightly out of time with the input to create a
+sweeping stereo effect.
+EQ Low controls the amount of gain on the low-range frequencies of a sound.
+EQ High controls the amount of gain on the high-range frequencies of a sound.
+16
+
+Editing the Keybed Curve
+You can edit the keybed curve by going to File > Edit Key Curve or by pressing the button
+reading Edit Key Curve to the right of the keyboard icon in the bottom right of the application
+window.
+This window allows you to adjust the velocity sensitivity of the keys to match the
+responsiveness of your preferred instrument. If you usually play piano or keyboards with
+weighted keys rather than synthesizers, you may prefer a heavier feeling key curve.
+
+To make it easier to reach low velocity notes, decrease the value of data points 1 and 2.
+To make it easier to reach high velocity notes, increase the value of data points 3 and 4.
+To change the black key balance, click the field and enter a value from 0.5 to 2.0. The
+chosen value is multiplied by the values selected above in the keybed curve to set the balance
+between black and white keys accordingly.
+To apply the changes you have made, you must press the SEND button.
+To return to the default settings, press the SEND DEFAULTS button.
+17
+
+Appendix
+Trademarks and Licenses
+Akai Professional is a trademark of inMusic Brands, Inc., registered in the U.S. and other countries.
+macOS is a trademark of Apple Inc., registered in the U.S. and other countries.
+Windows is a registered trademark of Microsoft Corporation in the United States and other
+countries.
+All other product or company names are trademarks or registered trademarks of their respective
+owners.
+
+18
+
+

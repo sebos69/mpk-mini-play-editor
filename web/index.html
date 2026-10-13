@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akai MPK Mini Play mk3 — Web Favorite Editor</title>
+  <meta name="description" content="Favorite Preset Editor for Akai MPK Mini Play mk3 using Web MIDI SysEx">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2312141a'/><rect x='4' y='6' width='24' height='20' rx='3' fill='%23e51821'/><rect x='6' y='14' width='3' height='10' fill='%23ffffff'/><rect x='11' y='14' width='3' height='10' fill='%23ffffff'/><rect x='16' y='14' width='3' height='10' fill='%23ffffff'/><rect x='21' y='14' width='3' height='10' fill='%23ffffff'/><rect x='8.5' y='14' width='2.5' height='6' fill='%2312141a'/><rect x='13.5' y='14' width='2.5' height='6' fill='%2312141a'/><rect x='18.5' y='14' width='2.5' height='6' fill='%2312141a'/><circle cx='8' cy='9' r='2' fill='%23ffffff'/><circle cx='14' cy='9' r='2' fill='%23ffffff'/><circle cx='20' cy='9' r='2' fill='%23ffffff'/></svg>">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <!-- Top Navigation & Connection Bar -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="akai-logo">
+        <span class="akai-badge">AKAI</span>
+        <div class="model-title">MPK mini Play mk3 <span>Web Editor</span></div>
+      </div>
+    </div>
+
+    <div class="midi-bar">
+      <div class="connection-pill" id="connPill">
+        <span class="status-dot"></span>
+        <span id="connStatusText">Disconnected</span>
+      </div>
+
+      <div class="midi-rx-pill" id="headerRxPill" title="Incoming MIDI Activity">
+        <span class="rx-dot" id="headerRxDot"></span>
+        <span>MIDI RX</span>
+      </div>
+
+      <div class="midi-select-group">
+        <label for="midiInSelect">In:</label>
+        <select id="midiInSelect" class="midi-select" title="MIDI Input Port">
+          <option value="">No MIDI Input</option>
+        </select>
+      </div>
+
+      <div class="midi-select-group">
+        <label for="midiOutSelect">Out:</label>
+        <select id="midiOutSelect" class="midi-select" title="MIDI Output Port">
+          <option value="">No MIDI Output</option>
+        </select>
+      </div>
+
+      <button id="connectMidiBtn" class="btn btn-primary" type="button">Connect MIDI</button>
+    </div>
+  </header>
+
+  <!-- Favorite Toolbar & Slot Bar -->
+  <nav class="favorite-toolbar" aria-label="Preset Navigation">
+    <div class="slots-wrapper">
+      <span class="slot-label">Hardware Favorite:</span>
+      <div class="slot-buttons" role="radiogroup" aria-label="Favorite Slot 1 to 8">
+        <button type="button" class="slot-btn active" data-slot="0">1</button>
+        <button type="button" class="slot-btn" data-slot="1">2</button>
+        <button type="button" class="slot-btn" data-slot="2">3</button>
+        <button type="button" class="slot-btn" data-slot="3">4</button>
+        <button type="button" class="slot-btn" data-slot="4">5</button>
+        <button type="button" class="slot-btn" data-slot="5">6</button>
+        <button type="button" class="slot-btn" data-slot="6">7</button>
+        <button type="button" class="slot-btn" data-slot="7">8</button>
+      </div>
+
+      <div style="margin-left: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+        <label for="presetNameInput" class="slot-label">Name:</label>
+        <input type="text" id="presetNameInput" class="preset-name-input" maxlength="14" value="FAV: MPC" placeholder="Preset Name">
+      </div>
+    </div>
+
+    <div class="preset-io-group">
+      <div style="display: flex; align-items: center; gap: 0.4rem;">
+        <label for="factoryPresetSelect" class="slot-label">Template:</label>
+        <select id="factoryPresetSelect" class="custom-select" style="width: 150px; padding: 0.3rem 0.5rem; font-size: 0.8rem;">
+          <option value="preset1">1: MPC</option>
+          <option value="preset2">2: Ableton Live</option>
+          <option value="preset3">3: Logic Pro X</option>
+          <option value="preset4">4: FL Studio 20</option>
+          <option value="preset5">5: Garageband</option>
+          <option value="preset6">6: ChromaPads</option>
+          <option value="preset7">7: MajorPads</option>
+          <option value="preset8">8: MinorPads</option>
+        </select>
+      </div>
+
+      <button id="sendRamBtn" class="btn btn-ram" title="Send preset directly to volatile RAM for instant audition without overwriting flash">⚡ Live RAM</button>
+      <button id="getDeviceBtn" class="btn btn-secondary" title="Request Favorite from hardware (Cmd 0x66)">📥 Get Device</button>
+      <button id="sendDeviceBtn" class="btn btn-secondary" title="Save Favorite to hardware flash (Cmd 0x64)">💾 Send Device</button>
+      
+      <input type="file" id="fileInput" accept=".mpkminiplaymk3,application/octet-stream" style="display: none;">
+      <button id="openFileBtn" class="btn btn-secondary" title="Open native .mpkminiplaymk3 file">📂 Open</button>
+      <button id="saveFileBtn" class="btn btn-secondary" title="Save native .mpkminiplaymk3 file">💾 Export</button>
+    </div>
+  </nav>
+
+  <!-- Hardware Mode Warning Banner -->
+  <aside class="mode-notice-banner" id="modeNoticeBanner" role="alert">
+    <div class="mode-notice-icon">⚠️</div>
+    <div class="mode-notice-body">
+      <span class="mode-notice-title">Important Hardware Mode Notice:</span>
+      When <strong>Internal Sounds</strong> is enabled on your keyboard, the 4 knobs transmit internal synth FX rather than your custom MIDI Controller assignments, and Min/Max CC limits are bypassed.
+      <span>To use your custom CC numbers in your DAW or Web Editor, make sure <strong>Internal Sounds</strong> is turned <strong>OFF</strong> on your MPK.</span>
+    </div>
+    <button type="button" class="mode-notice-close" id="closeNoticeBtn" aria-label="Dismiss warning" title="Dismiss notice">✕</button>
+  </aside>
+
+  <!-- Main Rack Workspace -->
+  <main class="main-workspace">
+
+    <!-- Section 1: Sound Module & FX Panel -->
+    <section class="panel sound-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Internal Sound Engine & FX</h2>
+        <span style="font-size: 0.75rem; color: var(--text-dim);">Real-Time Hardware Parameters</span>
+      </div>
+      <div class="panel-body">
+        <div class="sound-selectors-grid">
+          <div class="select-card">
+            <label for="kbdSoundSelect">Keyboard Sound (128 Sounds):</label>
+            <select id="kbdSoundSelect" class="custom-select"></select>
+          </div>
+          <div class="select-card">
+            <label for="padSoundSelect">Drum Kit (10 Kits):</label>
+            <select id="padSoundSelect" class="custom-select"></select>
+          </div>
+        </div>
+
+        <div class="fx-grid">
+          <div class="fx-card">
+            <span class="fx-name">Filter Cutoff</span>
+            <div class="fx-slider-wrapper">
+              <input type="range" id="fxFilter" class="fx-slider" min="0" max="127" value="127">
+              <span class="fx-val" id="fxFilterVal">127</span>
+            </div>
+          </div>
+
+          <div class="fx-card">
+            <span class="fx-name">Resonance</span>
+            <div class="fx-slider-wrapper">
+              <input type="range" id="fxReso" class="fx-slider" min="0" max="127" value="0">
+              <span class="fx-val" id="fxResoVal">0</span>
+            </div>
+          </div>
+
+          <div class="fx-card">
+            <span class="fx-name">Attack Time</span>
+            <div class="fx-slider-wrapper">
+              <input type="range" id="fxAttack" class="fx-slider" min="0" max="127" value="0">
+              <span class="fx-val" id="fxAttackVal">0</span>
+            </div>
+          </div>
+
+          <div class="fx-card">
+            <span class="fx-name">Release Time</span>
+            <div class="fx-slider-wrapper">
+              <input type="range" id="fxRelease" class="fx-slider" min="0" max="127" value="0">
+              <span class="fx-val" id="fxReleaseVal">0</span>
+            </div>
+          </div>
+
+          <div class="fx-card">
+            <span class="fx-name">Reverb</span>
+            <div class="fx-slider-wrapper">
+              <input type="range" id="fxReverb" class="fx-slider" min="0" max="127" value="0">
+              <span class="fx-val" id="fxReverbVal">0</span>
+            </div>
+          </div>
+
+          <div class="fx-card">
+            <span class="fx-name">Chorus</span>
+            <div class="fx-slider-wrapper">
+              <input type="range" id="fxChorus" class="fx-slider" min="0" max="127" value="32">
+              <span class="fx-val" id="fxChorusVal">32</span>
+            </div>
+          </div>
+
+          <div class="fx-card">
+            <span class="fx-name">EQ Low</span>
+            <div class="fx-slider-wrapper">
+              <input type="range" id="fxEqLow" class="fx-slider" min="0" max="127" value="64">
+              <span class="fx-val" id="fxEqLowVal">0 dB (64)</span>
+            </div>
+          </div>
+
+          <div class="fx-card">
+            <span class="fx-name">EQ High</span>
+            <div class="fx-slider-wrapper">
+              <input type="range" id="fxEqHigh" class="fx-slider" min="0" max="127" value="64">
+              <span class="fx-val" id="fxEqHighVal">0 dB (64)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Arpeggiator & MIDI Routing -->
+    <section class="panel arp-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Arpeggiator & MIDI Channels</h2>
+        <label class="switch-toggle" title="Enable Arpeggiator">
+          <input type="checkbox" id="arpOn" class="switch-input">
+          <span class="switch-track"></span>
+          <span style="font-size: 0.75rem; font-weight: 700; color: #fff;">ARP ON</span>
+        </label>
+      </div>
+      <div class="panel-body">
+        <div class="arp-controls-grid">
+          <div class="field-group">
+            <label class="field-label" for="arpTempo">Tempo BPM (60-240):</label>
+            <input type="number" id="arpTempo" class="custom-select" min="60" max="240" value="120">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="arpTimeDiv">Time Division:</label>
+            <select id="arpTimeDiv" class="custom-select"></select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="arpSwing">Swing (50% - 75%):</label>
+            <select id="arpSwing" class="custom-select"></select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="arpOctave">Octave Range:</label>
+            <select id="arpOctave" class="custom-select">
+              <option value="0">1 Octave</option>
+              <option value="1">2 Octaves</option>
+              <option value="2">3 Octaves</option>
+              <option value="3">4 Octaves</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="arpMode">Arp Mode:</label>
+            <select id="arpMode" class="custom-select"></select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="arpClock">Sync Clock:</label>
+            <select id="arpClock" class="custom-select">
+              <option value="0">Internal Clock</option>
+              <option value="1">External MIDI Clock</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="keysChannel">Keys & Knobs Channel:</label>
+            <select id="keysChannel" class="custom-select"></select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="padChannel">Pad MIDI Channel:</label>
+            <select id="padChannel" class="custom-select"></select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: 8 Q-Link Rotary Encoders (Knobs 1-8) -->
+    <section class="panel knobs-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Q-Link Encoders (Knobs 1–8)</h2>
+        <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+          <span class="mode-info-pill" title="Custom CCs and Min/Max limits only apply when Internal Sounds is toggled OFF on your keyboard">
+            ⚠️ Custom CCs require "Internal Sounds" OFF on MPK
+          </span>
+          <span style="font-size: 0.75rem; color: var(--text-dim);">Bank A (Knobs 1–4) & Bank B (Knobs 5–8)</span>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="knobs-grid" id="knobsGrid">
+          <!-- All 8 knobs rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: 16 MPC Drum Pads Matrix (Pads 5-8 Top, Pads 1-4 Bottom) -->
+    <section class="panel pads-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">MPC Drum Pads</h2>
+        <div class="bank-tabs">
+          <button type="button" class="tab-btn active" id="bankTabA">Bank A (Pads 1–8)</button>
+          <button type="button" class="tab-btn" id="bankTabB">Bank B (Pads 9–16)</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <label class="field-label" for="aftertouchSelect">Pad Aftertouch Mode:</label>
+            <select id="aftertouchSelect" class="custom-select" style="width: 140px; padding: 0.2rem 0.4rem; font-size: 0.75rem;">
+              <option value="0">Off</option>
+              <option value="1">Channel Aftertouch</option>
+              <option value="2">Polyphonic Aftertouch</option>
+            </select>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--text-dim);">Pads 5–8 (Top Row) / Pads 1–4 (Bottom Row)</span>
+        </div>
+
+        <div class="pads-grid" id="padsGrid">
+          <!-- 8 Pads rendered: Top Row 5-8, Bottom Row 1-4 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Keybed & Octave / Transpose -->
+    <section class="panel keybed-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">25-Key Dynamic Keybed</h2>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <span class="field-label">Octave:</span>
+            <button id="octDownBtn" class="slot-btn" type="button">-</button>
+            <span id="octValDisplay" style="font-family: var(--font-mono); font-weight: 700; width: 28px; text-align: center;">0</span>
+            <button id="octUpBtn" class="slot-btn" type="button">+</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <span class="field-label">Transpose:</span>
+            <button id="transDownBtn" class="slot-btn" type="button">-</button>
+            <span id="transValDisplay" style="font-family: var(--font-mono); font-weight: 700; width: 28px; text-align: center;">0</span>
+            <button id="transUpBtn" class="slot-btn" type="button">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="keybed-wrapper">
+          <div class="piano-keys-container" id="pianoKeysContainer">
+            <!-- 25 Piano Keys dynamically generated (C2 - C4) -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Joystick & Keybed Velocity Curve Calibration -->
+    <div class="extra-controls-grid">
+      <!-- Joystick XY Pad -->
+      <section class="panel joystick-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">4-Way Joystick (XY Pitch/Mod)</h2>
+        </div>
+        <div class="panel-body">
+          <div class="joystick-touchpad" id="joystickPad">
+            <div class="joystick-axis-line-x"></div>
+            <div class="joystick-axis-line-y"></div>
+            <div class="joystick-thumb" id="joystickThumb"></div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="field-group">
+              <label class="field-label" for="joyXMode">X Axis (Horiz):</label>
+              <select id="joyXMode" class="custom-select"></select>
+              <div style="display: flex; gap: 0.3rem; margin-top: 0.3rem;">
+                <input type="number" id="joyXCc1" class="pad-edit-input" min="0" max="127" title="CC 1" value="1">
+                <input type="number" id="joyXCc2" class="pad-edit-input" min="0" max="127" title="CC 2" value="2">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="joyYMode">Y Axis (Vert):</label>
+              <select id="joyYMode" class="custom-select"></select>
+              <div style="display: flex; gap: 0.3rem; margin-top: 0.3rem;">
+                <input type="number" id="joyYCc1" class="pad-edit-input" min="0" max="127" title="CC 1" value="1">
+                <input type="number" id="joyYCc2" class="pad-edit-input" min="0" max="127" title="CC 2" value="2">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Keybed Velocity Sensitivity Calibration -->
+      <section class="panel velocity-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Keybed Velocity Curve (SysEx 0x13)</h2>
+          <button id="sendCurveBtn" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" type="button">Send Curve to HW</button>
+        </div>
+        <div class="panel-body">
+          <svg class="curve-svg" id="curveSvg" viewBox="0 0 300 140">
+            <defs>
+              <linearGradient id="curveGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#e21a22" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#e21a22" stop-opacity="0.0"/>
+              </linearGradient>
+            </defs>
+            <!-- Background grid lines -->
+            <line x1="0" y1="35" x2="300" y2="35" stroke="#222530" stroke-width="1"/>
+            <line x1="0" y1="70" x2="300" y2="70" stroke="#222530" stroke-width="1"/>
+            <line x1="0" y1="105" x2="300" y2="105" stroke="#222530" stroke-width="1"/>
+            <line x1="75" y1="0" x2="75" y2="140" stroke="#222530" stroke-width="1"/>
+            <line x1="150" y1="0" x2="150" y2="140" stroke="#222530" stroke-width="1"/>
+            <line x1="225" y1="0" x2="225" y2="140" stroke="#222530" stroke-width="1"/>
+            <!-- Curve path -->
+            <path id="curveArea" fill="url(#curveGradient)" d="M 0 140 L 0 140 L 300 140 Z"/>
+            <path id="curvePath" fill="none" stroke="#e21a22" stroke-width="3" d="M 0 140 C 75 110, 225 30, 300 0"/>
+            <!-- Control points -->
+            <circle id="cpP1" cx="60" cy="115" r="5" fill="#fff" stroke="#e21a22" stroke-width="2"/>
+            <circle id="cpP2" cx="120" cy="90" r="5" fill="#fff" stroke="#e21a22" stroke-width="2"/>
+            <circle id="cpP3" cx="180" cy="55" r="5" fill="#fff" stroke="#e21a22" stroke-width="2"/>
+            <circle id="cpP4" cx="240" cy="20" r="5" fill="#fff" stroke="#e21a22" stroke-width="2"/>
+          </svg>
+
+          <div class="curve-sliders-row">
+            <div class="field-group">
+              <label class="field-label" for="curveP1">P1 (Soft):</label>
+              <input type="number" id="curveP1" class="pad-edit-input" min="0" max="16383" value="3000">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="curveP2">P2 (Med-Low):</label>
+              <input type="number" id="curveP2" class="pad-edit-input" min="0" max="16383" value="6000">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="curveP3">P3 (Med-High):</label>
+              <input type="number" id="curveP3" class="pad-edit-input" min="0" max="16383" value="10000">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="curveP4">P4 (Hard):</label>
+              <input type="number" id="curveP4" class="pad-edit-input" min="0" max="16383" value="14000">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="curveBlackBal">Black Balance:</label>
+              <input type="number" id="curveBlackBal" class="pad-edit-input" min="0" max="127" value="64" title="1.0 ratio = 64">
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Real-Time MIDI Event Monitor & Diagnostic Drawer -->
+    <section class="log-drawer" id="midiMonitorSection">
+      <div class="log-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <div class="midi-rx-indicator" id="midiRxIndicator" title="Blinks on incoming MIDI messages">
+            <span class="rx-led" id="rxLed"></span>
+            <span class="rx-label">MIDI IN</span>
+          </div>
+          <div class="monitor-tab-buttons">
+            <button type="button" class="tab-btn active" id="tabStreamBtn">Live Event Stream</button>
+            <button type="button" class="tab-btn" id="tabSysExBtn">SysEx Console</button>
+          </div>
+          <span class="event-counter" id="eventCounter">0 Events</span>
+        </div>
+
+        <div class="monitor-actions">
+          <div class="filter-pills">
+            <label class="filter-check"><input type="checkbox" id="filterNotes" checked> Notes</label>
+            <label class="filter-check"><input type="checkbox" id="filterCc" checked> Knobs/CC</label>
+            <label class="filter-check"><input type="checkbox" id="filterPitch" checked> Pitch/Joy</label>
+            <label class="filter-check"><input type="checkbox" id="filterAftertouch" checked> Aftertouch</label>
+            <label class="filter-check"><input type="checkbox" id="filterSysex" checked> SysEx</label>
+            <label class="filter-check"><input type="checkbox" id="filterClock"> Clock</label>
+          </div>
+          <label class="autoscroll-toggle">
+            <input type="checkbox" id="autoScrollCheck" checked> Auto-Scroll
+          </label>
+          <label class="sound-toggle" title="Play synth audio preview on incoming hardware notes">
+            <input type="checkbox" id="soundPreviewOnRx" checked> Audition RX
+          </label>
+          <button id="clearLogBtn" class="slot-btn" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;" type="button">Clear</button>
+        </div>
+      </div>
+
+      <!-- Tab 1: Live Event Stream View -->
+      <div class="monitor-view" id="streamView">
+        <div class="stream-table-header">
+          <span class="col-time">Time</span>
+          <span class="col-type">Event</span>
+          <span class="col-ch">Ch</span>
+          <span class="col-target">Target / Note / CC</span>
+          <span class="col-val">Value / Vel</span>
+          <span class="col-hex">Raw Hex</span>
+        </div>
+        <div class="stream-table-body" id="streamTableBody">
+          <!-- Live events streamed here -->
+        </div>
+      </div>
+
+      <!-- Tab 2: Raw SysEx Console View -->
+      <div class="monitor-view" id="sysexView" style="display: none;">
+        <div class="log-terminal" id="logTerminal">
+          <div class="log-entry info">[Ready] Akai MPK Mini Play mk3 Web Editor initialized. Waiting for MIDI events...</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    Akai Professional & MPK mini Play are trademarks of inMusic Brands, Inc. Zero external dependencies. Designed for Web MIDI enabled browsers (Chrome, Edge, Opera, Brave). See <a href="PROTOCOL.md" target="_blank">PROTOCOL.md</a> for reverse-engineered SysEx specification.
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
+

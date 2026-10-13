@@ -1,0 +1,15 @@
+# Git ignore rules for Akai MPK Mini Play mk3 Editor project
+
+# Installer binaries
+*.exe
+
+# Intermediate extraction debris
+extracted_installer/
+extracted_app/
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
